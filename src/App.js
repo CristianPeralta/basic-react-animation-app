@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Transition } from 'react-transition-group';
 
 import "./App.css";
 import Modal from "./components/Modal/Modal";
@@ -23,13 +24,25 @@ class App extends Component {
       <div className="App">
         <h1>React Animations</h1>
         <button className="Button" onClick={() => this.setState(prevstate => ({showBlock: !prevstate.showBlock}))} >Toggle</button>
-        {this.state.showBlock ? <div
-          style={{
-            background: 'red',
-            width: 100,
-            height: 100,
-            margin: 'auto'
-          }} ></div> : null}
+        <Transition
+          in={this.state.showBlock}
+          timeout={1000}
+          mountOnEnter
+          unmountOnExit
+          >
+          {state => (
+            <div
+              style={{
+                background: 'red',
+                width: 100,
+                height: 100,
+                margin: 'auto',
+                transition: 'opacity 1s ease-out',
+                opacity: state === 'exiting' ? 0 : 1
+              }}>
+            </div>
+          )}
+        </Transition>
         <br/>
         {this.state.modaIslOpen ? <Modal show={this.state.modaIslOpen} closed={this.closeModal} /> : null }
         {this.state.modaIslOpen ? <Backdrop show={this.state.modaIslOpen} /> : null }
